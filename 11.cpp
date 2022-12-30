@@ -28,9 +28,6 @@ void solve(std::string&& filename, int part) {
             std::string item;
             std::getline(ss, item, ':');
             while (std::getline(ss, item, ',')) {
-                if (items.find(monkey) == items.end()) {
-                    items.insert({monkey, std::deque<long>()});
-                }
                 items[monkey].push_back(std::stoi(item));
             }
         } else if (line.substr(0,3) == "  O") {
@@ -95,11 +92,7 @@ void solve(std::string&& filename, int part) {
                 }
                 monkey_items.pop_front();
 
-                if (inspections.find(monkey_id) == inspections.end()) {
-                    inspections.insert({monkey_id, 1});
-                } else {
-                    inspections[monkey_id]++;
-                }
+                inspections[monkey_id]++;
             }
         }
     }
