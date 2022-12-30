@@ -7,7 +7,7 @@
 #include <functional>
 #include <algorithm>
 
-void solve1(std::string&& filename) {
+void solve(std::string&& filename, int part) {
     std::cout << filename << ":\t";
 
     std::map<int,std::deque<long>> items;
@@ -44,7 +44,15 @@ void solve1(std::string&& filename) {
         }
     }
 
-    int n_rounds = 21;
+    int test_prod = 1;
+    for (const auto t : tests) {
+        test_prod *= t.second;
+    }
+
+    int n_rounds;
+    if (part == 1) n_rounds = 21;
+    else if (part == 2) n_rounds = 10001;
+
     std::map<int,int> inspections;
     for (int round = 1; round < n_rounds; ++round) {
         for (auto& m : items) {
@@ -67,9 +75,10 @@ void solve1(std::string&& filename) {
                         result = f(result, std::stoi(op));
                     }
                 }
-                result /= 3;
 
-                //if (round == 10) {
+                if (part == 1) result /= 3;
+                else if (part == 2) result %= test_prod;
+
                 //bool tf = result % tests[monkey_id] == 0;
                 //std::cout << "monkey=" << monkey_id << " "
                           //<< "item=" << monkey_items.front() << " "
@@ -78,7 +87,6 @@ void solve1(std::string&& filename) {
                           //<< "test=" << tests[monkey_id] << " "
                           //<< "true/false=" << tf << " "
                           //<< "to=" << (tf ? if_true[monkey_id] : if_false[monkey_id]) << std::endl;
-                //}
 
                 if (result % tests[monkey_id] == 0) {
                     items[if_true[monkey_id]].push_back(result);
@@ -92,34 +100,25 @@ void solve1(std::string&& filename) {
                 } else {
                     inspections[monkey_id]++;
                 }
-
             }
         }
-
-        //std::cout << "Round #" << round << std::endl; long sum = 0;
-        //for (auto& i : items) {
-            //std::cout << i.first << ":" << i.second.size() << " ";
-            //sum += i.second.size();
-        //}
-        //std::cout << "SUM: " << sum << std::endl;
     }
 
     std::vector<long> v;
-    for (auto i : inspections) v.push_back(i.second);
+    for (auto i : inspections) {
+        v.push_back(i.second);
+    }
     std::sort(v.begin(), v.end(), [](long a, long b){return a>b;});
     long solution = v[0] * v[1];
 
-    std::cout << "1: " << solution << std::endl;
-}
-
-void solve2(std::string&& filename) {
+    std::cout << part << ": " << solution << std::endl;
 }
 
 int main(int argc, char *argv[]) {
     std::string day(argv[1]);
 
-    solve1("input/" + day + ".test");
-    solve1("input/" + day + ".in");
-    //solve2("input/" + day + ".test");
-    //solve2("input/" + day + ".in");
+    solve("input/" + day + ".test", 1);
+    solve("input/" + day + ".in", 1);
+    solve("input/" + day + ".test", 2);
+    solve("input/" + day + ".in", 2);
 }
