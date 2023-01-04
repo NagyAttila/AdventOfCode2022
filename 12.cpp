@@ -65,34 +65,20 @@ public:
     bool step(char curr, char next) {
         bool okey = curr >= 'a' && curr <= 'z' && next >= 'a' && next <= 'z';
         if (increase) {
-            return (okey && next <= curr+1) || (curr == 'z' && next == end);
+            return (okey && next <= curr+1) || (curr >= 'y' && next == end);
         } else {
             return okey && curr <= next+1;
         }
     }
 
-    void print_trace() {
-        for (int i = 0; i < n_row; ++i) {
-            for (int j = 0; j < n_col; ++j) {
-                if (trace[i][j]) {
-                    std::cout << trace[i][j];
-                } else {
-                    std::cout << ' ';
-                }
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-    }
-
-    void print_visited() {
-        std::cout.fill('0');
+    void print_debug() {
+        std::cout.fill(' ');
         for (int i = 0; i < n_row; ++i) {
             for (int j = 0; j < n_col; ++j) {
                 if (visited[i][j] != INT_MAX) {
-                    std::cout << std::setw(3) << visited[i][j] << " " ;
+                    std::cout << std::setw(4) << visited[i][j] << ":" << trace[i][j];
                 } else {
-                    std::cout << std::setw(3) << 0 << " " ;
+                    std::cout << std::setw(6) << 0;
                 }
             }
             std::cout << std::endl;
@@ -157,8 +143,7 @@ void solve1(std::string&& filename) {
     Map map(filename, 'S', 'E', true);
     std::cout << "1: " << map.solve() << std::endl;
 
-    //map.print_trace();
-    //map.print_visited();
+    //map.print_debug();
 }
 
 void solve2(std::string&& filename) {
@@ -167,8 +152,7 @@ void solve2(std::string&& filename) {
     Map map(filename, 'E', 'a', false);
     std::cout << "2: " << map.solve() << std::endl;
 
-    //map.print_trace();
-    //map.print_visited();
+    //map.print_debug();
 }
 
 int main(int argc, char *argv[]) {
